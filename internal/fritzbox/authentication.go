@@ -23,8 +23,15 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 
 	response := buildResponse(session.Challenge, adminPassword)
 
-	log.Printf("fbUser %s\n", fb.User)
-	session, err = fetchSessionInfo(client, fb.Host+"/login_sid.lua?&username="+fb.User+"&response="+response)
+	log.Printf("fbUser ='%s'\n", fb.User)
+	if fb.User == "" {
+		_url=fb.Host + "/login_sid.lua?response=" + response
+	}
+	else {
+		_url=fb.Host + "/login_sid.lua?username="+fb.User+"&response=" + response
+	}
+	log.Printf("url = '%s'\n", _url)
+	session, err = fetchSessionInfo(client, _url)
 	if err != nil {
 		fmt.Printf("failed to fetch Session Info err:%v\n", err)
 		return err
