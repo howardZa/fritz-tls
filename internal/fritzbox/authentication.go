@@ -39,7 +39,7 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 
 	if session.is_pbkdf2() {
 		log.Printf("session is pbkdf2\n")
-		response = buildPbkdf2Response(session.Challenge, adminPassword)
+		response := buildPbkdf2Response(session.Challenge, adminPassword)
 	} else {
 		// fallback to md4
 	}
@@ -136,8 +136,8 @@ func buildPbkdf2Response(challenge string, password string) string {
 	if err != nil {
 		return ""
 	}
-	_p1 = pbkdf2.Key([]byte(password), []byte(_salt1), _iter1, 32, sha256.New)
-	_p2 = pbkdf2.Key([]byte(fmt.Sprintf("%x", _p1)), []byte(_salt2), _iter2, 32, sha256.New)
+	_p1 := pbkdf2.Key([]byte(password), []byte(_salt1), _iter1, 32, sha256.New)
+	_p2 := pbkdf2.Key([]byte(fmt.Sprintf("%x", _p1)), []byte(_salt2), _iter2, 32, sha256.New)
 
 	log.Printf("_p2= %x\n", _p2)
 //hash1 = hashlib.pbkdf2_hmac("sha256", password.encode(), salt1, iter1)
