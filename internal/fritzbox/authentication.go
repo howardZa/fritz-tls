@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"log"
 	"io"
 	"net/http"
 	"strings"
@@ -22,6 +23,7 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 
 	response := buildResponse(session.Challenge, adminPassword)
 
+	log.Printf("fbUser %s", fb.User)
 	session, err = fetchSessionInfo(client, fb.Host+"/login_sid.lua?&username="+fb.User+"&response="+response)
 	if err != nil {
 		return err
