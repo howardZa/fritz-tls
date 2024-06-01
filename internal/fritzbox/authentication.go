@@ -37,12 +37,14 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 	}
 	fmt.Printf("SessionInfo: %v\n", session)
 
+	response := ""
 	if session.is_pbkdf2() {
 		log.Printf("session is pbkdf2\n")
-		response := buildPbkdf2Response(session.Challenge, adminPassword)
+		response = buildPbkdf2Response(session.Challenge, adminPassword)
 	} else {
 		// fallback to md4
 	}
+	log.Printf("response = %v\n", response)
 
 	response := buildResponse(session.Challenge, adminPassword)
 
