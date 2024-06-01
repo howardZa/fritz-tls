@@ -46,7 +46,7 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 	}
 	log.Printf("response = %v\n", response)
 
-	response := buildResponse(session.Challenge, adminPassword)
+	response = buildResponse(session.Challenge, adminPassword)
 
 	_url := fb.Host + "/login_sid.lua?username="+fb.User+"&response=" + response
 	log.Printf("url = '%s'\n", _url)
