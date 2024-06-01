@@ -9,15 +9,20 @@ import (
 	"io"
 //  "crypto/sha256"
 //  "crypto/aes"
-//	"encoding/hex"
+	"encoding/hex"
 //	"golang.org/x/crypto/pbkdf2"
 	"net/http"
 	"strings"
+	"strconv"
 )
 
 type loginState struct {
 	challenge string
 	blocktime string
+}
+
+func (si *SessionInfo) is_pbkdf2() bool {
+	return strings.HasPrefix(si.Challenge, "2$")
 }
 
 // PerformLogin performs a login and returns SessionInfo including
@@ -31,12 +36,16 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 	}
 	fmt.Printf("SessionInfo: %v\n", session)
 
+	if session.is_pbkdf2() {
+		log.Printf("session is pbkdf2\n")
+		response = buildPbkdf2Response(session.Challenge, adminPassword)
+	} else {
+		// fallback to md4
+	}
+
 	response := buildResponse(session.Challenge, adminPassword)
 
-	_url := fb.Host + "/login_sid.lua?response=" + response
-	if fb.User != "" {
-		_url = fb.Host + "/login_sid.lua?username="+fb.User+"&response=" + response
-	}
+	_url := fb.Host + "/login_sid.lua?username="+fb.User+"&response=" + response
 	log.Printf("url = '%s'\n", _url)
 
 	session, err = fetchSessionInfo(client, _url)
@@ -106,4 +115,14 @@ func buildResponse(challenge string, password string) string {
 	md5Response := md5.Sum([]byte(challengePassword)) // nolint: gas
 
 	return challenge + "-" + fmt.Sprintf("%x", md5Response)
+}
+
+func buildPbkdf2Response(challenge string, password string) string {
+	_challenge_parts := strings.Split(challenge, "$")
+	_iter1 := strconv.Atoi(_challenge_parts[1])
+	_salt1 := hex.DecodeString(_challenge_parts[2])
+	_iter2 := strconv.Atoi(_challenge_parts[3])
+	_salt2 := hex.DecodeString(_challenge_parts[4])
+
+	return ""
 }
