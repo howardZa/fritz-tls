@@ -61,6 +61,7 @@ func (fb *FritzBox) CheckSession() (bool, error) {
 }
 
 func fetchSessionInfo(client *http.Client, url string) (SessionInfo, error) {
+  log.Printf("fritzbox.fetchSessionInfo(%s)\n", url)
 	resp, err := client.Get(url)
 	if err != nil {
 		return SessionInfo{}, err
