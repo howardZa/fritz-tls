@@ -7,7 +7,10 @@ import (
 	"fmt"
 	"log"
 	"io"
-	"pbkdf2"
+  "crypto/sha256"
+  "crypto/aes"
+	"encoding/hex"
+	"golang.org/x/crypto/pbkdf2"
 	"net/http"
 	"strings"
 )
