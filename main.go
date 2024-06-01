@@ -10,8 +10,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/tisba/fritz-tls/internal/fritzbox"
-	"github.com/tisba/fritz-tls/internal/fritzutils"
+	"github.com/howardZa/fritz-tls/internal/fritzbox"
+	"github.com/howardZa/fritz-tls/internal/fritzutils"
 )
 
 var (

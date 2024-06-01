@@ -1,4 +1,4 @@
-module github.com/tisba/fritz-tls
+module github.com/howardZa/fritz-tls
 
 require (
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
