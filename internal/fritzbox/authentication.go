@@ -7,10 +7,11 @@ import (
 	"fmt"
 	"log"
 	"io"
-//  "crypto/sha256"
+  "crypto/sha256"
 //  "crypto/aes"
 	"encoding/hex"
-//	"golang.org/x/crypto/pbkdf2"
+//	"github.com/wuriyanto48/go-pbkdf2"
+	"golang.org/x/crypto/pbkdf2"
 	"net/http"
 	"strings"
 	"strconv"
@@ -119,10 +120,28 @@ func buildResponse(challenge string, password string) string {
 
 func buildPbkdf2Response(challenge string, password string) string {
 	_challenge_parts := strings.Split(challenge, "$")
-	_iter1 := strconv.Atoi(_challenge_parts[1])
-	_salt1 := hex.DecodeString(_challenge_parts[2])
-	_iter2 := strconv.Atoi(_challenge_parts[3])
-	_salt2 := hex.DecodeString(_challenge_parts[4])
+	_iter1,err := strconv.Atoi(_challenge_parts[1])
+	if err != nil {
+		return ""
+	}
+	_salt1,err := hex.DecodeString(_challenge_parts[2])
+	if err != nil {
+		return ""
+	}
+	_iter2,err := strconv.Atoi(_challenge_parts[3])
+	if err != nil {
+		return ""
+	}
+	_salt2,err := hex.DecodeString(_challenge_parts[4])
+	if err != nil {
+		return ""
+	}
+	_p1 = pbkdf2.Key([]byte(password), []byte(_salt1), _iter1, 32, sha256.New)
+	_p2 = pbkdf2.Key([]byte(fmt.Sprintf("%x", _p1)), []byte(_salt2), _iter2, 32, sha256.New)
 
+	log.Printf("_p2= %x\n", _p2)
+//hash1 = hashlib.pbkdf2_hmac("sha256", password.encode(), salt1, iter1)
+// # Once with dynamic salt.
+// hash2 = hashlib.pbkdf2_hmac("sha256", hash1, salt2, iter2)
 	return ""
 }
