@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-  "log"
 	"net/http"
 	"strings"
 )
@@ -22,8 +21,6 @@ func (fb *FritzBox) PerformLogin(adminPassword string) error {
 	}
 
 	response := buildResponse(session.Challenge, adminPassword)
-
-  log.Printf("fbUser %s)\n", fb.User)
 
 	session, err = fetchSessionInfo(client, fb.Host+"/login_sid.lua?&username="+fb.User+"&response="+response)
 	if err != nil {
@@ -64,7 +61,6 @@ func (fb *FritzBox) CheckSession() (bool, error) {
 }
 
 func fetchSessionInfo(client *http.Client, url string) (SessionInfo, error) {
-  log.Printf("fritzbox.fetchSessionInfo(%s)\n", url)
 	resp, err := client.Get(url)
 	if err != nil {
 		return SessionInfo{}, err
