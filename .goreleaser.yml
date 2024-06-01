@@ -27,14 +27,6 @@ changelog:
     - '^test:'
 release:
   github:
-    owner: tisba
+    owner: howardZa
     name: fritz-tls
-brews:
-  -
-    repository:
-      owner: tisba
-      name: homebrew-taps
-    install: bin.install "fritz-tls"
-    directory: Formula
-    homepage: "https://github.com/tisba/fritz-tls"
-    description: "Automate TLS certificate installation for AVM FRITZ!Box"
+brews: []
