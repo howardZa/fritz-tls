@@ -19,4 +19,5 @@ type FritzBox struct {
 type SessionInfo struct {
 	SID       string `xml:"SID"`
 	Challenge string `xml:"Challenge"`
+	Blocktime string `xml:"Blocktime"`
 }

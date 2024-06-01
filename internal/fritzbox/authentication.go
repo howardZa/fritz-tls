@@ -15,19 +15,24 @@ import (
 	"strings"
 )
 
+type loginState struct {
+	challenge string
+	blocktime string
+}
+
 // PerformLogin performs a login and returns SessionInfo including
 // the session id (SID) on success
 func (fb *FritzBox) PerformLogin(adminPassword string) error {
 	client := fb.getHTTPClient()
 
-	session, err := fetchSessionInfo(client, fb.Host+"/login_sid.lua")
+	session, err := fetchSessionInfo(client, fb.Host+"/login_sid.lua?version=2")
 	if err != nil {
 		return err
 	}
+	fmt.Printf("SessionInfo: %v\n", session)
 
 	response := buildResponse(session.Challenge, adminPassword)
 
-	log.Printf("fbUser ='%s'\n", fb.User)
 	_url := fb.Host + "/login_sid.lua?response=" + response
 	if fb.User != "" {
 		_url = fb.Host + "/login_sid.lua?username="+fb.User+"&response=" + response
